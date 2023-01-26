@@ -94,19 +94,72 @@
 
 //* Functions Returning Functions
 
-const greet = function (greeting) {
-  return function (name) {
-    console.log(`${greeting} ${name}`);
-  };
-};
+// const greet = function (greeting) {
+//   return function (name) {
+//     console.log(`${greeting} ${name}`);
+//   };
+// };
 
-const greeterHey = greet("Hey");
-greeterHey("Steven");
-greeterHey("Jessica");
+// const greeterHey = greet("Hey");
+// greeterHey("Steven");
+// greeterHey("Jessica");
 
-greet("Hello")("Steven");
+// greet("Hello")("Steven");
 
 // challenge
-const greetArr = (greeting) => (name) => console.log(`${greeting} ${name}`);
+// const greetArr = (greeting) => (name) => console.log(`${greeting} ${name}`);
 
-greetArr("Hi")("Steven");
+// greetArr("Hi")("Steven");
+
+//* The call and apply Methods
+
+const lufthansa = {
+  airline: "Lufthansa",
+  iataCode: "LH",
+  bookings: [],
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+  },
+};
+
+lufthansa.book(239, "Steven Restrepo");
+lufthansa.book(635, "Jessica Williams");
+console.log(lufthansa);
+
+const eurowings = {
+  airline: "Eurowings",
+  iataCode: "EW",
+  bookings: [],
+};
+
+const book = lufthansa.book;
+
+// Does NOT work
+//book(23, "Jessica William");
+
+// Call method
+book.call(eurowings, 23, "Jessica Williams");
+console.log(eurowings);
+
+book.call(lufthansa, 239, "Coral Restrepo");
+console.log(lufthansa);
+
+const swiss = {
+  airline: "Swiss Air Lines",
+  iataCode: "LX",
+  bookings: [],
+};
+
+book.call(swiss, 77, "Naiya Restrepo");
+console.log(swiss);
+
+// Apply Method
+const flightData = [583, "George Cooper"];
+book.apply(swiss, flightData); // this apply method is not use in modern JS
+console.log(swiss);
+
+// this is a better way to call it then apply
+book.call(swiss, ...flightData);
